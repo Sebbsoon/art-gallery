@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import type { ImageData } from "../types/ImageData";
 
-let cachedData: { name: string; id: string; url: string }[] | undefined = undefined;
+let cachedData: ImageData[] | undefined = undefined;
 
 export default function useImportGallery() {
   const [data, setData] = useState<typeof cachedData>(cachedData);
@@ -9,20 +10,15 @@ export default function useImportGallery() {
 
   useEffect(() => {
     if (!cachedData) {
-      fetch("https://art-gallery-backend-fv6z.onrender.com/api/images")
-        .then(res => {
-          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-          return res.json();
-        })
-        .then((json: { name: string; id: string }[]) => {
-          const mapped = json.map(img => ({
-            ...img,
-            url: `https://art-gallery-backend-fv6z.onrender.com/api/images/${img.id}`
-          }));
-          cachedData = mapped;
-          setData(mapped);
-          setLoading(false);
-        })
+      fetchImageList()
+        .then(
+          (json: ImageData[]) => {
+            const mapped = mapImageData(json);
+            cachedData = mapped;
+            setData(mapped);
+            setLoading(false);
+          }
+        )
         .catch(err => {
           setError(err as Error);
           setLoading(false);
@@ -30,5 +26,19 @@ export default function useImportGallery() {
     }
   }, []);
 
+  async function fetchImageList() {
+    const res = await fetch("https://art-gallery-backend-fv6z.onrender.com/api/images");
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    return await res.json();
+  }
+
+  function mapImageData(imageList: ImageData[]) {
+    const mapped: ImageData[] = imageList.map((img: ImageData) => ({
+      ...img,
+      url: `https://art-gallery-backend-fv6z.onrender.com/api/images/${img.id}`,
+      thumbnail: `https://art-gallery-backend-fv6z.onrender.com/api/thumbnail/${img.id}`
+    }));
+    return mapped;
+  }
   return { data, loading, error };
 }

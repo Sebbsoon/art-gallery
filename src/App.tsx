@@ -8,6 +8,7 @@ import useFetchFilter from './hooks/useFetchFilter';
 import Sider from 'antd/es/layout/Sider';
 import { orange } from '@ant-design/colors';
 import HeaderMenu from './components/HeaderMenu';
+import useImportThumbnails from './hooks/useImportThumbnails';
 
 const { Header, Content, Footer } = Layout;
 
@@ -25,8 +26,6 @@ function App() {
   useEffect(() => { console.log(data) }, [data])
   useEffect(() => { console.log("error: " + importError) }, [importError])
   useEffect(() => { console.log(filter) }, [filter])
-  useEffect(() => { console.log("screen: " + screen) }, [screen])
-  useEffect(() => { console.log(orange) }, [orange])
 
   return (
     <ConfigProvider
@@ -53,14 +52,13 @@ function App() {
         width: '100vw',
       }}>
         <Layout>
-          <Sider width={"25vw"} collapsedWidth={20} breakpoint='lg'/>
+          <Sider width={"25vw"} collapsedWidth={20} breakpoint='lg' />
           <Content style={{ display: "flex", justifyContent: 'center', padding: 30 }}>
             {screen === "home" && <HomeScreen />}
             {screen === "traditional" && <ImagesDisplayScreen images={data} loading={loading} filter={filter} tags={["trad"]} />}
             {screen === "digital" && <ImagesDisplayScreen images={data} loading={loading} filter={filter} tags={["digi"]} />}
-
           </Content>
-          <Sider width={"25vw"} collapsedWidth={20} breakpoint='lg'/>
+          <Sider width={"25vw"} collapsedWidth={20} breakpoint='lg' />
         </Layout>
       </Layout>
     </ConfigProvider>

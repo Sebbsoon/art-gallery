@@ -15,7 +15,6 @@ function ImagesDisplay({ images, loading, filter, tags }: ImagesDisplayProps) {
                 .filter((f) => f.tags.some((tag) => tags.includes(tag)))
                 .map((f) => images.find((img) => img.id === f.id))
                 .filter((img): img is ImageData => img !== undefined);
-            console.log("filter images")
             setFilteredImages(newFilter);
         }
     }, [filter, images]);
