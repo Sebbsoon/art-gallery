@@ -1,36 +1,47 @@
-import { Grid, Card, CardMedia, Typography } from "@mui/material";
+import { Flex, Spin, Typography } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+import type { ImagesDisplayProps, ImageData } from "../types/ImageData";
+import { useEffect, useState } from 'react';
+import ImageDisplay from './ImageDisplay';
 
-type ImageData = {
-    url: string;
-    name: string;
-};
 
-type ImagesDisplayProps = {
-    images: ImageData[];
-};
+function ImagesDisplay({ images, loading, filter, tags }: ImagesDisplayProps) {
 
-function ImagesDisplay({ images }: ImagesDisplayProps) {
-    if (!images || images.length === 0) {
-        return <Typography >No images available</Typography>;
+    const [filteredImages, setFilteredImages] = useState<(ImageData[] | undefined)>([]);
+
+    useEffect(() => {
+        if (filter && images) {
+            const newFilter: ImageData[] = filter.filter
+                .filter((f) => f.tags.some((tag) => tags.includes(tag)))
+                .map((f) => images.find((img) => img.id === f.id))
+                .filter((img): img is ImageData => img !== undefined);
+            console.log("filter images")
+            setFilteredImages(newFilter);
+        }
+    }, [filter, images]);
+
+    useEffect(() => { console.log(filteredImages) }, [filteredImages])
+    if (loading) {
+        return (
+            <Flex vertical style={{ alignItems: 'center' }}>
+                <Typography>The first request from may take some time. Thank you for your patience.</Typography>
+                <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
+            </Flex>
+
+        )
+    }
+    if (!filteredImages || filteredImages.length === 0) {
+        return <text >No images available</text>;
     }
 
-    console.log("Images:", images);
-
     return (
-        <Grid container spacing={3}>
-            {images.map((img, idx) => (
-                <Grid key={idx}>
-                    <Card>
-                        <CardMedia
-                            component="img"
-                            height="200"
-                            image={img.url}
-                            alt={img.name}
-                        />
-                    </Card>
-                </Grid>
-            ))}
-        </Grid>
+        <Flex wrap gap={"middle"} justify="space-between">
+            {filteredImages && filteredImages.map((image: ImageData, index) => {
+                return (
+                    <ImageDisplay image={image} index={index} />
+                )
+            })}
+        </Flex>
     );
 }
 

@@ -9,5 +9,5 @@ export default defineConfig({
       "/api": "http://localhost:8080",
     }
   },
-  base: "/",
+  base: "/art-gallery/",
 })
