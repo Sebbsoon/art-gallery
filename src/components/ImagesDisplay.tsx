@@ -23,7 +23,9 @@ function ImagesDisplay({ images, loading, filter, tags }: ImagesDisplayProps) {
     if (loading) {
         return (
             <Flex vertical style={{ alignItems: 'center' }}>
-                <Typography>The first request from may take some time. Thank you for your patience.</Typography>
+                <Typography.Paragraph>The first request from may take some time.</Typography.Paragraph>
+                <Typography.Paragraph>Thank you for your patience.</Typography.Paragraph>
+
                 <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
             </Flex>
 
