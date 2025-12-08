@@ -10,6 +10,7 @@ import { orange } from '@ant-design/colors';
 import HeaderMenu from './components/HeaderMenu';
 import { LinkedinFilled, InstagramFilled, GithubFilled } from '@ant-design/icons';
 import type { MenuItemType } from 'antd/es/menu/interface';
+import useScreenSize from './hooks/useScreenSize';
 
 const { Header, Content, Footer } = Layout;
 
@@ -17,16 +18,19 @@ function App() {
 
   const { data, loading, error: importError } = useImportGallery();
   const { filter, error: filterError } = useFetchFilter();
-  const [screen, setScreen] = useState("home");
+  const [screen, setScreen] = useState(localStorage.getItem("lastScreen") ?? "home");
+  const screenSize = useScreenSize();
 
   const onChange: MenuProps['onClick'] = (e) => {
     setScreen(e.key);
+    localStorage.setItem("lastScreen", e.key);
   }
 
   useEffect(() => { console.log("loading: " + loading) }, [loading])
   useEffect(() => { console.log(data) }, [data])
   useEffect(() => { console.log("error: " + importError) }, [importError])
   useEffect(() => { console.log(filter) }, [filter])
+  useEffect(() => { console.log("Current screen size: " + screenSize) }, [screenSize])
 
   const items = [
     {
@@ -69,6 +73,10 @@ function App() {
             itemBg: orange[3]!,
             itemSelectedColor: orange[5]!,
             fontSize: 18,
+            horizontalItemSelectedBg: orange[4]!,
+            horizontalItemSelectedColor: orange[7]!
+
+
           }
         },
         token: {
@@ -88,8 +96,8 @@ function App() {
           <Content style={{ display: "flex", justifyContent: 'center', }}>
             <Flex vertical style={{ width: '100vw' }}>
               <Flex justify='space-between' style={{ backgroundColor: orange[3], padding: '5px 5px 15px 80px' }}>
-                <Menu mode="horizontal" defaultSelectedKeys={['home']} onClick={onChange} items={items} />
-                <Menu mode="horizontal" defaultSelectedKeys={['home']} selectable={false} items={socMed} />
+                <Menu mode="horizontal" defaultSelectedKeys={[screen]} onClick={onChange} items={items} />
+                <Menu mode="horizontal" selectable={false} items={socMed} />
               </Flex>
               <Layout style={{ paddingLeft: 50, paddingRight: 50 }}>
                 {screen === "home" && <HomeScreen />}

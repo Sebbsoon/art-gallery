@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import ImageDisplay from './ImageDisplay';
 
 
-function ImagesDisplay({ images, loading, filter, tags }: ImagesDisplayProps) {
+function ImagesDisplaySmall({ images, loading, filter, tags }: ImagesDisplayProps) {
 
     const [filteredImages, setFilteredImages] = useState<(ImageData[] | undefined)>([]);
 
@@ -20,17 +20,16 @@ function ImagesDisplay({ images, loading, filter, tags }: ImagesDisplayProps) {
 
     useEffect(() => { console.log(filteredImages) }, [filteredImages])
 
-    
+
     if (loading) {
         return (
-            <Flex vertical align='center'>
+            <Flex align='center'>
                 <Typography.Paragraph>The first request from may take some time.</Typography.Paragraph>
                 <Typography.Paragraph>Thank you for your patience.</Typography.Paragraph>
                 <Flex justify='space-between' gap={'middle'} style={{ paddingTop: 50, width: '100%' }}>
-                    <Skeleton.Image active style={{ maxWidth: 200, minWidth: 100, backgroundColor: "#00000028", padding: 10, borderRadius: 4 }} />
-                    <Skeleton.Image active style={{ maxWidth: 200, minWidth: 100, backgroundColor: "#00000028", padding: 10, borderRadius: 4 }} />
-                    <Skeleton.Image active style={{ maxWidth: 200, minWidth: 100, backgroundColor: "#00000028", padding: 10, borderRadius: 4 }} />
-                    <Skeleton.Image active style={{ maxWidth: 200, minWidth: 100, backgroundColor: "#00000028", padding: 10, borderRadius: 4 }} />
+                    <Skeleton.Image active style={{ minWidth: 100, backgroundColor: "#00000028", padding: 10, borderRadius: 4 }} />
+                    <Skeleton.Image active style={{ minWidth: 100, backgroundColor: "#00000028", padding: 10, borderRadius: 4 }} />
+
                 </Flex>
             </Flex>
 
@@ -41,7 +40,7 @@ function ImagesDisplay({ images, loading, filter, tags }: ImagesDisplayProps) {
     }
 
     return (
-        <Flex wrap gap={"middle"} justify="space-between" style={{ paddingTop: 50 }}>
+        <Flex vertical wrap gap={"middle"} align="center" style={{ paddingTop: 50 }}>
             {filteredImages && filteredImages.map((image: ImageData, index) => {
                 return (
                     <ImageDisplay image={image} index={index} />
@@ -51,4 +50,4 @@ function ImagesDisplay({ images, loading, filter, tags }: ImagesDisplayProps) {
     );
 }
 
-export default ImagesDisplay;
+export default ImagesDisplaySmall;

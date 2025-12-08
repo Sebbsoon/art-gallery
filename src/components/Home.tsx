@@ -1,7 +1,5 @@
-import { Button, Divider, Flex, Layout, Space, Typography } from "antd"
-import type { ImagesDisplayProps } from "../types/ImageData"
-import type { FilterData } from "../types/FilterData";
-import useUpdateFilter from "../hooks/useUpdateFilter";
+import { Flex, Typography } from "antd"
+
 
 
 const Home = () => {
